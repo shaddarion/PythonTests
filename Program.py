@@ -8,7 +8,7 @@ class GoogleTestCase(unittest.TestCase):
         # self.browser = webdriver.Chrome('C:\ChromeDriver\chromedriver.exe')
         # self.browser.implicitly_wait(59)
         # self.addCleanup(self.browser.quit)
-        self.browser = WebDriverWrapper.Singleton.getInstance().driver
+        self.browser = WebDriverWrapper.Singleton.getInstance().driver 
 
     def testPageTitle(self):
         self.browser.get('http://www.google.com')
