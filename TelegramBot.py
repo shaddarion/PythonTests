@@ -1,10 +1,9 @@
 import telebot
-import time
 
 class TelegramBot:
     def __init__(self):
         self._token = '713524902:AAEJCI6OuPYPfwi6XooDpcZW7fhtfj5nktQ'
         self._bot = telebot.TeleBot(self._token)
 
-    def sendMessage_(self, msg):
+    def sendMessage(self, msg):
         self._bot.send_message(-335169556, msg)

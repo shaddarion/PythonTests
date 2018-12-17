@@ -17,4 +17,7 @@ class Singleton:
             raise Exception("This class is a singleton!")
         else:
             Singleton.__instance = self
-            self.driver = webdriver.Chrome('C:\ChromeDriver\chromedriver.exe')
+            self.driver = webdriver.Chrome('C:/ChromeDriver/chromedriver.exe')
+            self.driver.implicitly_wait(20)
+            self.driver.set_page_load_timeout(59)
+            self.driver.maximize_window()

@@ -1,23 +1,38 @@
 import unittest
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 import WebDriverWrapper
+from Pages.homePage import HomePage
 
-class GoogleTestCase(unittest.TestCase):
+class HomePageTestCases(unittest.TestCase):
     
     def setUp(self):
-        # self.browser = webdriver.Chrome('C:\ChromeDriver\chromedriver.exe')
-        # self.browser.implicitly_wait(59)
-        # self.addCleanup(self.browser.quit)
-        self.browser = WebDriverWrapper.Singleton.getInstance().driver 
+        self.driver = WebDriverWrapper.Singleton.getInstance().driver 
+        # self.driver = webdriver.Chrome('C:/ChromeDriver/chromedriver.exe')
 
-    def testPageTitle(self):
-        self.browser.get('http://www.google.com')
-        self.assertIn('Google', self.browser.title)
+    def test_PageTitle(self):
 
+        driver = self.driver
+        homePage = HomePage(driver)
+
+        self.driver.get('https://www.1stopbedrooms.com/')
+
+        if len(driver.find_elements_by_class_name('home1-categories-block-content')) > 0:
+            pass
+        else:
+            self.fail('FAAAAAAAAAAAAIL') 
+
+        # try: 
+        #     homePage.getHomeCategoriesBlock().click()
+        # except NoSuchElementException:
+        #     print('Exception occured!!!')    
+                
+
+    @unittest.skip('Skip for a while')
     def testPageTitle2(self):
-        self.browser.get('https://www.1stopbedrooms.com/')
-        self.assertIn('Google', self.browser.title)
+        self.driver.get('https://www.1stopbedrooms.com/')
+        self.assertIn('Google', self.driver.title)
 
 # if __name__ == '__main__':
-#     unittest.main(verbosity=2)
+#     unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='G:/Developer/GitHub/PythonTests/Reports'))
 
