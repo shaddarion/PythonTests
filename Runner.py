@@ -5,37 +5,51 @@ import Resulter
 import HtmlTestRunner
 import datetime
 from TelegramBot import TelegramBot
+import SuiteEnv
 
-bot = TelegramBot()
+import sys
 
-suite = unittest.TestSuite()
-suite.addTest(unittest.makeSuite(Program.HomePageTestCases))
+from argparse import ArgumentParser
 
-resulter = Resulter.Resulter()
-#HtmlTestRunner.HTMLTestRunner.resultclass = Resulter.Resulter
-unittest.TextTestRunner.resultclass = Resulter.Resulter
+def suiteRunner():
+    bot = TelegramBot()
 
-# file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H%M_report.html")
-# output = open(file_name, "w")
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(Program.HomePageTestCases))
 
-runner = unittest.TextTestRunner(verbosity=2)
-#runner = HtmlTestRunner.HTMLTestRunner(output=output, verbosity = 1)
-resulter = runner.run(suite)
+    resulter = Resulter.Resulter()
+    #HtmlTestRunner.HTMLTestRunner.resultclass = Resulter.Resulter
+    unittest.TextTestRunner.resultclass = Resulter.Resulter
 
-bot.sendMessage('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun))
+    # file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H%M_report.html")
+    # output = open(file_name, "w")
 
-print("errors")
-print(len(resulter.errors))
+    runner = unittest.TextTestRunner(verbosity=2)
+    #runner = HtmlTestRunner.HTMLTestRunner(output=output, verbosity = 1)
+    resulter = runner.run(suite)
+    WebDriverWrapper.Singleton.getInstance().quit()
 
-for er in resulter.errors:
-    (className, error) = er
-    print(str(className))
+    bot.sendMessage('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun))
 
-print("failures")
-print(len(resulter.failures))
-print("skipped")
-print(len(resulter.skipped))
-print("testsRun")
-print(resulter.testsRun)
+    print("errors")
+    print(len(resulter.errors))    
+    print("failures")
+    print(len(resulter.failures))
+    print("skipped")
+    print(len(resulter.skipped))
+    print("testsRun")
+    print(resulter.testsRun)
+    
 
-WebDriverWrapper.Singleton.getInstance().driver.quit()
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("-w", "--webdriver", help="webdriver type")
+    
+    args = parser.parse_args()
+    print(args)
+    if 'help' is args:
+        parser.print_help()
+    else:
+        SuiteEnv.SuiteEnv.getInstance().putEnv("webdriver", args.webdriver)
+        suiteRunner()
