@@ -31,10 +31,10 @@ class Singleton:
             raise Exception("This class is a singleton!")
         else:
             Singleton.__instance = self
-            webdriverPath = getDriverPath(platform.node())
-            webdriver_env = SuiteEnv.SuiteEnv.getInstance().getEnv("webdriver")
+            # webdriverPath = getDriverPath(platform.node())
+            # webdriver_env = SuiteEnv.SuiteEnv.getInstance().getEnv("webdriver")
             self.driver = webdriver.Chrome('C:/ChromeDriver/chromedriver.exe')
-            self.driver.implicitly_wait(20)
+            self.driver.implicitly_wait(6)
             self.driver.set_page_load_timeout(59)
             self.driver.maximize_window()
 

@@ -10,7 +10,7 @@ class Resulter(unittest.TestResult):
 
     def addFailure(self, test, err):
         self._bot.sendMessage('Failure occured: ' + str(test) + ' ' + str(err))
-        super().addError(test, err)
+        super().addFailure(test, err)
 
     def addError(self, test, err):
         self._bot.sendMessage('Error occured: ' + str(test) + ' ' + str(err))

@@ -1,7 +1,7 @@
 import unittest
 import Program
 import WebDriverWrapper
-import Resulter
+from Resulter import Resulter
 import HtmlTestRunner
 import datetime
 from TelegramBot import TelegramBot
@@ -11,23 +11,39 @@ import sys
 
 from argparse import ArgumentParser
 
+def writeResult(output, arrayResult, strResult):
+    if len(arrayResult) > 0:
+        output.write(strResult + ':\n\n')
+
+        for i in arrayResult:
+            output.write('TEST METHOD NAME - ' + i[0]._testMethodName + ':\n\n')
+            output.write(str(i[1]))
+            output.write('\n')
+
+        output.write('\n')
+
+def makeReport(resulter, output):
+    writeResult(output, resulter.errors, 'Errors')
+    writeResult(output, resulter.failures, 'Failures')
+
 def suiteRunner():
     bot = TelegramBot()
 
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Program.HomePageTestCases))
 
-    resulter = Resulter.Resulter()
-    #HtmlTestRunner.HTMLTestRunner.resultclass = Resulter.Resulter
-    unittest.TextTestRunner.resultclass = Resulter.Resulter
+    resulter = Resulter()
+    unittest.TextTestRunner.resultclass = Resulter
 
-    # file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H%M_report.html")
-    # output = open(file_name, "w")
+    file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H%M_report.txt")
+    output = open(file_name, "w")
 
     runner = unittest.TextTestRunner(verbosity=2)
-    #runner = HtmlTestRunner.HTMLTestRunner(output=output, verbosity = 1)
     resulter = runner.run(suite)
+    makeReport(resulter, output)
+
     WebDriverWrapper.Singleton.getInstance().quit()
+    output.close()
 
     bot.sendMessage('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun))
 

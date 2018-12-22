@@ -17,6 +17,8 @@ class HomePageTestCases(unittest.TestCase):
 
         self.driver.get('https://www.1stopbedrooms.com/')
 
+        # driver.find_element_by_class_name('home1-categories-block-content').click()
+
         if len(driver.find_elements_by_class_name('home1-categories-block-content')) > 0:
             pass
         else:
@@ -28,7 +30,7 @@ class HomePageTestCases(unittest.TestCase):
         #     print('Exception occured!!!')    
                 
 
-    @unittest.skip('Skip for a while')
+    #@unittest.skip('Skip for a while')
     def testPageTitle2(self):
         self.driver.get('https://www.1stopbedrooms.com/')
         self.assertIn('Google', self.driver.title)
