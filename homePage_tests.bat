@@ -1,1 +1,1 @@
-python Runner.py --testPatern 'homePage'
+python Runner.py --testPatern 'homePage' --browser chrome

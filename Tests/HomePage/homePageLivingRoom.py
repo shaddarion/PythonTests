@@ -2,22 +2,22 @@ import unittest
 
 from WebDriverWrapper import Singleton
 
-class HomePageBedroom(unittest.TestCase):
+class HomePageLivingRoom(unittest.TestCase):
     
     def setUp(self):
         self.driver = Singleton.getInstance().driver
 
-    def test_NavBar_Bedroom(self):
+    def test_NavBar_LivingRoom_Item(self):
         driver = self.driver
         driver.get('https://www.1stopbedrooms.com/')
 
-        driver.find_element_by_id('menu3').click()
+        driver.find_element_by_id('menu5').click()
 
         url = driver.current_url
         pageTitle = driver.find_element_by_class_name('page-title').text
 
-        self.assertIn('bedroom', url, 'Wrong URL by clicking Bedroom in navigation bar.')
-        self.assertEqual(pageTitle, 'Bedroom', 'Wrong page title by clicking Bedroom in navigation bar.')
+        self.assertIn('living', url, 'Wrong URL by clicking Living Room in navigation bar.')
+        self.assertEqual(pageTitle, 'Living Room', 'Wrong page title by clicking Living Room in navigation bar.')
 
     def tearDown(self):
         self.driver.delete_all_cookies()

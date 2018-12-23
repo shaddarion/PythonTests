@@ -7,3 +7,7 @@ class TelegramBot:
 
     def sendMessage(self, msg):
         self._bot.send_message(-335169556, msg)
+
+    def sendDocument(self, docomentPath):
+        doc = open(docomentPath, 'rb')
+        self._bot.send_document(-335169556, doc)

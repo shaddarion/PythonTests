@@ -1,1 +1,1 @@
-python Runner.py --testPatern Bedroom --browser chrome
+python Runner.py --testPatern bedroomPage --browser chrome

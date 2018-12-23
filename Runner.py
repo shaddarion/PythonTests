@@ -18,9 +18,8 @@ def writeResult(output, arrayResult, strResult):
 
         output.write('\n')
 
-def makeReport(resulter, patternString):
-    file_name = datetime.datetime.now().strftime('Reports/%Y_%m_%d_%H%M_' + patternString + '_report.txt')
-    output = open(file_name, 'w')
+def makeReport(file_name, resulter, patternString):
+    output = open('Reports/' + file_name, 'w')
     
     output.write('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun) + '\n\n')
 
@@ -39,11 +38,14 @@ def suiteRunner(patternString):
     unittest.TextTestRunner.resultclass = Resulter
 
     resulter = unittest.TextTestRunner(verbosity=1).run(tests)
-    makeReport(resulter, patternString)
+
+    reportFileName = datetime.datetime.now().strftime('%Y_%m_%d_%H%M_' + patternString + '_report.txt')
+    makeReport(reportFileName, resulter, patternString)
 
     WebDriverWrapper.Singleton.getInstance().quit()
 
     bot.sendMessage('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun))
+    bot.sendDocument('Reports/' + reportFileName)
 
 if __name__ == "__main__":
     parser = ArgumentParser()
