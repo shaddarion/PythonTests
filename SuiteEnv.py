@@ -21,7 +21,6 @@ class SuiteEnv:
         self.map[key] = value
 
     def getEnv(self, key):
-        print(key)
         if key not in self.map:
-            raise Exception("opps!")
+            raise Exception("Can't find key - " + key + ". Maybe you misspelled an argument. Pay attention to the arguments you've passed through command line.")
         return self.map[key]

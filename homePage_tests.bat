@@ -1,0 +1,1 @@
+python Runner.py --testPatern 'homePage'

@@ -1,15 +1,11 @@
 import unittest
-import Program
-import WebDriverWrapper
-from Resulter import Resulter
-import HtmlTestRunner
 import datetime
-from TelegramBot import TelegramBot
-import SuiteEnv
-
-import sys
-
+import WebDriverWrapper
 from argparse import ArgumentParser
+
+from Resulter import Resulter
+from TelegramBot import TelegramBot
+from SuiteEnv import SuiteEnv
 
 def writeResult(output, arrayResult, strResult):
     if len(arrayResult) > 0:
@@ -22,50 +18,42 @@ def writeResult(output, arrayResult, strResult):
 
         output.write('\n')
 
-def makeReport(resulter, output):
+def makeReport(resulter, patternString):
+    file_name = datetime.datetime.now().strftime('Reports/%Y_%m_%d_%H%M_' + patternString + '_report.txt')
+    output = open(file_name, 'w')
+    
+    output.write('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun) + '\n\n')
+
     writeResult(output, resulter.errors, 'Errors')
     writeResult(output, resulter.failures, 'Failures')
 
-def suiteRunner():
+    output.close()
+
+def suiteRunner(patternString):
     bot = TelegramBot()
 
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Program.HomePageTestCases))
+    patternTests = '*' + patternString + '*.py'
+    tests = unittest.TestLoader().discover('.', pattern = patternTests)
 
     resulter = Resulter()
     unittest.TextTestRunner.resultclass = Resulter
 
-    file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H%M_report.txt")
-    output = open(file_name, "w")
-
-    runner = unittest.TextTestRunner(verbosity=2)
-    resulter = runner.run(suite)
-    makeReport(resulter, output)
+    resulter = unittest.TextTestRunner(verbosity=1).run(tests)
+    makeReport(resulter, patternString)
 
     WebDriverWrapper.Singleton.getInstance().quit()
-    output.close()
 
     bot.sendMessage('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun))
 
-    print("errors")
-    print(len(resulter.errors))    
-    print("failures")
-    print(len(resulter.failures))
-    print("skipped")
-    print(len(resulter.skipped))
-    print("testsRun")
-    print(resulter.testsRun)
-    
-
-
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-w", "--webdriver", help="webdriver type")
+    parser.add_argument('-b', '--browser', help='browser type')
+    parser.add_argument('-t', '--testPatern', help='start tests by pattern')
     
     args = parser.parse_args()
     print(args)
     if 'help' is args:
         parser.print_help()
-    else:
-        SuiteEnv.SuiteEnv.getInstance().putEnv("webdriver", args.webdriver)
-        suiteRunner()
+    elif 'testPatern' in args:
+        SuiteEnv.getInstance().putEnv('browser', args.browser)
+        suiteRunner(args.testPatern)

@@ -2,11 +2,10 @@ import json
 import platform
 
 from selenium import webdriver
-
-import SuiteEnv
+from SuiteEnv import SuiteEnv
 
 def getDriverPath(pcName):
-    with open('os.json', 'r') as f:
+    with open('Computers.json', 'r') as f:
         fileContent = str(f.read())
 
     content = json.loads(fileContent)
@@ -31,9 +30,10 @@ class Singleton:
             raise Exception("This class is a singleton!")
         else:
             Singleton.__instance = self
-            # webdriverPath = getDriverPath(platform.node())
-            # webdriver_env = SuiteEnv.SuiteEnv.getInstance().getEnv("webdriver")
-            self.driver = webdriver.Chrome('C:/ChromeDriver/chromedriver.exe')
+            
+            webdriverPath = self.getDriverPath()
+            self.driver = webdriver.Chrome(webdriverPath)
+            # self.driver = webdriver.Chrome('C:/ChromeDriver/chromedriver.exe')
             self.driver.implicitly_wait(6)
             self.driver.set_page_load_timeout(59)
             self.driver.maximize_window()
@@ -41,3 +41,15 @@ class Singleton:
     def quit(self):
         if (self.driver):
             self.driver.quit()
+
+    def getDriverPath(self):
+        """ Returns path to the webdriver if your PC is in list. """
+        webdriverPath = getDriverPath(platform.node())
+        browser_env = SuiteEnv.getInstance().getEnv("browser")
+        
+        if browser_env == 'chrome':
+            return webdriverPath + 'chromedriver.exe'
+        elif browser_env == 'firefox':
+            return webdriverPath + 'firefoxdriver.exe'
+        else:
+            return webdriverPath + 'chromedriver.exe'
