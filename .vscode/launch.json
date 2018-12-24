@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["--testPatern", "homePageBedroom", "--browser", "chrome"]
+            "args": ["--testPattern", "homePageBedroom", "--browser", "chrome"]
         },
         {
             "name": "Python: Current File (Integrated Terminal)",

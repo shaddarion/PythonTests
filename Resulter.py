@@ -2,6 +2,7 @@ import unittest
 import TelegramBot
 from TelegramBot import TelegramBot
 from WebDriverWrapper import Singleton
+from Reporter import Reporter
 
 class Resulter(unittest.TestResult):    
     _bot = TelegramBot()
@@ -11,8 +12,8 @@ class Resulter(unittest.TestResult):
 
     def addFailure(self, test, err):
         testName = str(test._testMethodName)
-        Singleton.getInstance().driver.get_screenshot_as_file('Reports/' + testName + '.png')
-        self._bot.sendMessage('Failure occured: ' + testName + ' ' + str(err))
+        Singleton.getInstance().driver.get_screenshot_as_file(Reporter.getInstance().getReportFolder() + '/' + testName + 'Failure.png')
+        # self._bot.sendMessage('Failure occured: ' + testName + ' ' + str(err))
         super().addFailure(test, err)
 
     # def addError(self, test, err):
