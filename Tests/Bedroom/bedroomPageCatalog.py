@@ -16,7 +16,7 @@ class BedroomPageCatalog(unittest.TestCase):
         driver.find_element_by_class_name('catalog-layred-tabs').find_element_by_link_text('Bedroom Sets').click()
 
         url = driver.current_url
-        self.assertIn(url, 'bedroom/bedroom-sets', 'Wrong URL by clicking Bedroom in navigation bar.')
+        self.assertIn('bedroom/bedroom-sets', url, 'Wrong URL by clicking Bedroom in navigation bar.')
 
         pageTitle = driver.find_element_by_class_name('page-title').text
         self.assertEqual(pageTitle, 'Bedroom Sets')        

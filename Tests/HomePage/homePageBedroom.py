@@ -19,7 +19,7 @@ class HomePageBedroom(unittest.TestCase):
         self.assertIn('bedroom', url, 'Wrong URL by clicking Bedroom in navigation bar.')
         self.assertEqual(pageTitle, 'Bedroom', 'Wrong page title by clicking Bedroom in navigation bar.')
 
-        #self.fail('error lalala')
+        # self.fail('error lalala')
 
     def tearDown(self):
         self.driver.delete_all_cookies()

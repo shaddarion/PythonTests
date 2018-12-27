@@ -8,8 +8,13 @@ from Reporter import Reporter
 
 def suiteRunner(patternString):
     bot = TelegramBot()
+    patternTests = ''
 
-    patternTests = '*' + patternString + '*.py'
+    if patternString == 'all':
+        patternTests = '*.py'
+    else:
+        patternTests = '*' + patternString + '*.py'       
+
     tests = unittest.TestLoader().discover('.', pattern = patternTests)
 
     unittest.TextTestRunner.resultclass = Resulter
