@@ -12,8 +12,7 @@ class HomePageLivingRoom(unittest.TestCase):
         driver = self.webDriver
         driver.get('https://www.1stopbedrooms.com/')
 
-        driver.clickElement(Locators.HomePage.livingRoomNavigationBarButton)
-        # driver.getWebElement(Locators.HomePage.livingRoomNavigationBarButton).click()
+        driver.clickElement(Locators.HomePage.NavigationBar.livingRoomButton)
 
         url = driver.getCurrentUrl()
         self.assertIn('living', url, 'Wrong URL by clicking Living Room in navigation bar.')

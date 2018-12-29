@@ -12,7 +12,7 @@ class HomePageBedroom(unittest.TestCase):
         driver = self.webDriver
         driver.get('https://www.1stopbedrooms.com/')
 
-        driver.clickElement(Locators.HomePage.bedRoomNavigationBarButton).click()
+        driver.clickElement(Locators.HomePage.NavigationBar.bedRoomButton).click()
 
         url = driver.getCurrentUrl()
         pageTitle = driver.getWebElement(Locators.NavigationBarChildPages.pageTitle).text
