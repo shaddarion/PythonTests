@@ -1,5 +1,5 @@
 import unittest
-import WebDriverWrapper
+from WebDriver.WebDriverWrapper import WebDriverWrapper
 from argparse import ArgumentParser
 from Resulter import Resulter
 from TelegramBot import TelegramBot
@@ -30,7 +30,7 @@ def suiteRunner(patternString):
         bot.sendMessage('Errors:\n' + str(len(resulter.errors)) + '\nFailures:\n' + str(len(resulter.failures)) + '\nSkipped:\n' + str(len(resulter.skipped)) + '\nTestCount:\n' + str(resulter.testsRun))    
         bot.sendDocument(reporter.getReportFileName())
 
-    WebDriverWrapper.Singleton.getInstance().quit()
+    WebDriverWrapper.getInstance().quit()
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -41,6 +41,6 @@ if __name__ == "__main__":
     print(args)
     if 'help' is args:
         parser.print_help()
-    elif 'testPattern' in args:
-        SuiteEnv.getInstance().putEnv('browser', args.browser)
-        suiteRunner(args.testPattern)
+    else:
+        SuiteEnv.getInstance().putEnv('browser', (args.browser if args.browser != None else 'chrome'))
+        suiteRunner(args.testPattern if args.testPattern != None else 'all')

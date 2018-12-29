@@ -1,25 +1,25 @@
 import unittest
 
-from WebDriverWrapper import Singleton
+from WebDriver.WebDriverWrapper import WebDriverWrapper
+from WebDriverLocator.Locators import Locators
 
 class BedroomPageCatalog(unittest.TestCase):
     
     def setUp(self):
-        self.driver = Singleton.getInstance().driver
+        self.webDriver = WebDriverWrapper.getInstance()
 
     def test_Bedroom_Catalog(self):
-        driver = self.driver
+        driver = self.webDriver
         driver.get('https://www.1stopbedrooms.com/')
 
-        driver.find_element_by_id('menu3').click()
+        driver.clickElement(Locators.HomePage.bedRoomNavigationBarButton)
 
-        driver.find_element_by_class_name('catalog-layred-tabs').find_element_by_link_text('Bedroom Sets').click()
+        categoryContainer = driver.getWebElement(Locators.NavigationBarChildPages.categoryContainer)
 
-        url = driver.current_url
+        driver.findElementByLinkText('Bedroom Sets', categoryContainer).click()        
+
+        url = driver.getCurrentUrl()
         self.assertIn('bedroom/bedroom-sets', url, 'Wrong URL by clicking Bedroom in navigation bar.')
 
-        pageTitle = driver.find_element_by_class_name('page-title').text
-        self.assertEqual(pageTitle, 'Bedroom Sets')        
-
-    def tearDown(self):
-        self.driver.delete_all_cookies()
+        pageTitle = driver.getWebElement(Locators.NavigationBarChildPages.pageTitle).text
+        self.assertIn('Bedroom Sets', pageTitle)

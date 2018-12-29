@@ -1,7 +1,7 @@
 import unittest
 import TelegramBot
 from TelegramBot import TelegramBot
-from WebDriverWrapper import Singleton
+from WebDriver.WebDriverWrapper import WebDriverWrapper
 from Reporter import Reporter
 
 class Resulter(unittest.TestResult):    
@@ -10,15 +10,18 @@ class Resulter(unittest.TestResult):
     def startTestRun(self):
         self._bot.sendMessage('New Test Run')
 
+    def startTest(self, test):
+        WebDriverWrapper.getInstance().deleteAllCookies()
+
     def addFailure(self, test, err):
         testName = str(test._testMethodName)
-        Singleton.getInstance().driver.get_screenshot_as_file(Reporter.getInstance().getReportFolder() + '/' + testName + 'Failure.png')
-        # self._bot.sendMessage('Failure occured: ' + testName + ' ' + str(err))
+        WebDriverWrapper.getInstance().getScreenShotAsFile(Reporter.getInstance().getReportFolder() + '/' + testName + '_Failure.png')
         super().addFailure(test, err)
 
-    # def addError(self, test, err):
-    #     self._bot.sendMessage('Error occured: ' + str(test) + ' ' + str(err))
-    #     super().addError(test, err)
+    def addError(self, test, err):
+        testName = str(test._testMethodName)
+        WebDriverWrapper.getInstance().getScreenShotAsFile(Reporter.getInstance().getReportFolder() + '/' + testName + '_Error.png')
+        super().addError(test, err)
 
     # def stopTest(self, test):
     #     print('stopTest')
